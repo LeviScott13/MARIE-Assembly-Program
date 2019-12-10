@@ -1,0 +1,230 @@
+/Jonathan Golden & Levi Sutton
+/CS3505L Friday @ 1:25 pm
+/The program will let the user enter an array size.
+/The program will then fill the array with decimal values.
+/The program will then print the array as the data was entered.
+/The program will then print the array sorted in descending order.
+/The program will then print the array sorted in ascending order.
+
+/BEGIN PROGRAM
+
+Org	0
+Input				/ user input sent to AC.
+Store		Size		/ store the AC value into size.
+Load		Array		/ load the Array memory location.
+Store		IndPos		/ copy IndPos address into Array
+Clear				/ AC = 0
+Store 		Index		/ store AC to Index (index = 0)
+StartLoop,	Clear		/ label(StartLoop) 
+Load		Size		/ load Size to AC.
+Subt		Index		/ subtract Index from AC.
+Skipcond	800		/ if AC>0, skip next line(PC+1). ~if size > index skip next line
+Jump		Print		/ jump to print function
+Jump		UserInput	/ jump to input function
+PrintRet,	Clear		/ label(PrintRet)
+Output				/ print AC value
+Output				/ print AC value
+Load		Func		/ load value of Func to AC
+Add		One		/ increase 
+Store		Func		/ store value of AC to Func
+Jump 		Desc		/ jump to Desc part of program
+DescRet,	Clear		/ label(DescRet)
+Output				/ print AC value
+Output				/ print AC value
+Load		Func		/ load value of Func to AC
+Add		One		/ increase 
+Store		Func		/ store value of AC to Func
+Jump 		Asce		/ jump to Asce part of program
+AsceRet,	Clear		/ label(AscRet)
+Halt				/ end program
+/END PROGRAM
+
+/BEGIN USERINPUT(input) function.
+UserInput,	Clear		/ AC = 0
+Input				/ get input from user
+StoreI		IndPos		/ store AC at the memory location of IndPos(index position)
+Load		IndPos		/ load current IndPos to AC
+Add		One		/ move index position up one element (IndPos++)
+Store		IndPos		/ save AC to IndPos
+Load		Index		/ load Index value to AC
+Add		One		/ increase AC value by one(Index++)
+Store		Index		/ store AC to Index 
+Jump		StartLoop  	/ return to StartLoop to fill array
+/End USERINPUT(input) function.
+
+/BEGIN PRINT fucntion
+Print,		Clear		/ clear AC, AC = 0
+Store		Index  		/ store AC to Index
+Load		Array		/ copy array address into AC
+Store		IndPos		/ store AC to IndPos
+LoopTest,	Clear		/ label(LoopTest), clear AC, AC = 0
+Load		Size   		/ load Size to AC. if size > index skip and do more
+Subt		Index		/ subtract Index from AC. if size > index skip and do more
+Skipcond	800		/ if AC>0, skip next line. if size > index skip and do more
+Jump		PrintEnd	/ jump to PrintRet
+LoadI		IndPos		/ load value located at memory address to AC
+Output				/ print AC value
+Load		IndPos 	/ load IndPos to AC
+Add		One		/ increment AC by one, IndPos++
+Store		IndPos		/ store AC to IndPos
+Load		Index   	/ load Index to AC
+Add		One		/ increment AC by one, Index++
+Store		Index		/ store AC to Index
+Jump		LoopTest	/ jump to loop test
+PrintEnd,	Clear		/ label (PrintEnd)
+Load		Func		/ load value of Func to AC
+Subt		One		/ subtract 1 from AC
+Skipcond 	000		/ if AC < 0, skip next line
+Jump		Functions	/ jump to Functions 
+Jump		PrintRet	/ return to loop test
+Functions,	Clear		/ clear AC
+Load		Func		/ load value of Func to AC
+Subt		One		/ subtract 1 from AC
+Skipcond	400		/ if AC = 0. Skip next line
+Jump		AsceRet	/ jump to AsceRet
+Jump		DescRet	/ jump to DescRet
+
+/END PRINT(print) function
+
+/BEGIN DESC (Desc)Descending sort function
+Desc,	Clear			/ clear AC....beginning of loop
+Load		One		/ load 1 to AC
+Store		Flag		/ store AC to Flag(1)
+DescOuter,	Clear		/ AC = 0
+Load		Array		/ copy array address into AC
+Store		IndPos		/ store AC to IndPos
+Clear				/  AC = 0
+Store		Index  		/ store AC to Index
+Load		Flag		/ load Flag to AC 
+Skipcond	800		/ if AC>0 skip next line
+Jump		DescEnd	/ jump to DescEnd
+Clear				/ AC = 0
+Store Flag			/ Store AC to Flag
+Store TempA			/ store AC to TempA
+DescInner,	Clear		/ label(DescInner), clear AC, AC = 0
+Load		Size    		/ load Size to AC. 
+Subt		Index		/ subtract Index from AC.
+Skipcond	800		/ if AC>0, skip next line. if size > index skip and do more
+Jump		DescOuter	/ jump DescOuter....jump to Outer loop
+LoadI		IndPos 	/ load value located at memory address to AC
+Store		TempA		/ store the value of AC(value @ IndPos) to TempA
+Load		IndPos		/ load IndPos to AC
+Add		One		/ increment AC by 1
+Store		IndPos		/ store incremented value to IndPos
+Load	Index			/ load Index to AC
+Add	One			/ add 1 to AC
+Store	Index			/ store AC to Index
+LoadI		IndPos		/ load value at memory location of IndPos
+Subt		TempA		/ subtract value of TempA from AC(value of IndPos) 
+Skipcond 	800		/ if AC > 0, skip next line, else do next
+Jump	DescCond1		/ jump to DescCond1 ~ flow control
+Jump	Swap			/ jump to Swap function
+DescCond1, Load Index	/ label DescCond1, loads index to AC
+Add One			/ increase AC by 1
+Store TempA			/ Store AC to TempA
+Load Size			/ load Size to AC
+Subt TempA			/ subtract TempA
+SkipCond 400			/ if AC = 0, skip next line
+Jump DescCond2		/ jump to DescCond2 ~flow control
+Jump DescOuter		/ jump to the outer loop of the descending sort
+DescCond2, Skipcond 000	/ label DescCond2, if AC < 0 skip next line
+Jump DescInner		/ jump to DescInner
+Jump DescOuter		/ jump to DescOuter
+DescSwapRet, Clear		/ label DescSwapRet and clears the AC
+Jump	DescInner		/ jump to DescInner
+DescEnd, 	Clear		/ label DescEnd
+Jump Print			/ jump to print
+/END DESC (Desc) Descending sort function
+
+/BEGIN ASCE Ascending sort fuction
+/fill in with descending but reverse conditions. Changed Desc to Asce
+Asce,	Clear			/ clear AC....beginning of loop
+Load		One		/ load 1 to AC
+Store		Flag		/ store AC to Flag(1)
+AsceOuter,	Clear		/ AC = 0
+Load		Array		/ copy array address into AC
+Store		IndPos		/ store AC to IndPos
+Clear				/  AC = 0
+Store		Index  		/ store AC to Index
+Load		Flag		/ load Flag to AC 
+Skipcond	800		/ if AC>0 skip next line
+Jump		AsceEnd	/ jump to DescEnd
+Clear				/ AC = 0
+Store Flag			/ Store AC to Flag
+Store TempA			/ store AC to TempA
+AsceInner,	Clear		/ label(DescInner), clear AC, AC = 0
+Load		Size    		/ load Size to AC. 
+Subt		Index		/ subtract Index from AC.
+Skipcond	800		/ if AC>0, skip next line. if size > index skip and do more
+Jump		AsceOuter	/ jump DescOuter....jump to Outer loop
+LoadI		IndPos 	/ load value located at memory address to AC
+Store		TempA		/ store the value of AC(value @ IndPos) to TempA
+Load		IndPos		/ load IndPos to AC
+Add		One		/ increment AC by 1
+Store		IndPos		/ store incremented value to IndPos
+Load	Index			/ load Index to AC
+Add	One			/ add 1 to AC
+Store	Index			/ store AC to Index
+LoadI		IndPos		/ load value at memory location of IndPos
+Subt		TempA		/ subtract value of TempA from AC(value of IndPos) 
+Skipcond 	000		/ if AC > 0, skip next line, else do next
+Jump	AsceCond1		/ jump to AsceCond1
+Jump	Swap			/ jump to Swap function
+AsceCond1, Load Index	/ label AsceCond1 Load Index to AC
+Add One			/ increase AC by 1
+Store TempA			/ Store AC to TempA
+Load Size			/ load Size to AC
+Subt TempA			/ subt TempA from AC
+SkipCond 400			/ if AC = 0, skip next line
+Jump AsceCond2		/ jump AsceCond2
+Jump AsceOuter		/ jump AsceOuter
+AsceCond2, Skipcond 000	/ label AsceCond2, if AC < 0 skip next line
+Jump AsceInner		/ jump to AsceInner
+Jump AsceOuter		/ jump tp AsceOuter
+AsceSwapRet, Clear		/ label DescSwapRet and clears the AC
+Jump	AsceInner		/ jump to DescInner
+AsceEnd, 	Clear		/ label DescEnd
+Jump Print			/ jump to print
+/end (Asce)Ascending sort function
+
+/BEGIN SWAP
+Swap,	Clear			/Swap Label
+Store	TempA			/ sets value of TempA to 0
+Store	TempB			/ sets value of tempA to 0
+LoadI	IndPos			/ loads value at memory in IndPos
+Store	TempA			/ saves it to TempA
+Load	IndPos			/ loads the IndPos(Index Position) to AC
+Subt	One			/ subtracts one from the AC
+Store	IndPos			/ stores the AC to IndPos
+LoadI	IndPos			/ loads the value at memory in IndPos
+Store	TempB			/ saves it to TempB
+Load	TempA			/ load TempA to AC
+StoreI	IndPos			/ store TempA value to memory
+Load	IndPos			/ loads IndPos to AC
+Add	One			/ increments by one
+Store	IndPos			/ stores AC to IndPos
+Load	TempB			/ loads value of TempB to AC
+StoreI	IndPos			/ stores value of AC to IndPos @ memory
+Load	One			/ loads One to the AC
+Store	Flag			/ stores AC to flag
+Load	Func			/ load value of Func to AC
+Subt	One			/ subtract 1 from AC
+Skipcond 400			/ if AC = 0. Skip next line
+Jump	AsceOuter		/ jump to AsceOuter
+Jump	DescOuter		/ jump to DescOuter
+/END SWAP
+
+Flag, hex 0
+Func, hex 0				/ function notation: 1 is Desc, 2 is Asce
+TempA, hex 0				/ swap variable
+TempB, hex 0				/ swap variable
+
+/changed above to hex from dec
+
+Index,	hex	0      			 / current array index
+IndPos,	hex	AAA     	 / address of current array index
+Zero,	hex	0			/ for 0
+One,	hex	1       			/ for ++ or 1
+Size,	hex	0      			 / user chosen array size
+Array,	hex	AAA			/ address for start of the array storage
+
